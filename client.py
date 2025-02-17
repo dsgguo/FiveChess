@@ -5,9 +5,10 @@ import time
 
 
 def client():
+    ip = input("请输入服务器ip地址: ")
     time.sleep(1)  # 等待服务器启动
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect(('20.2.217.120', 12345))
+    client.connect((str(ip), 12345))
     Client_message = Message(client)
     
     name = input("请输入玩家昵称和房间密码(格式：张三,123): ")
@@ -20,8 +21,12 @@ def client():
         if not data:
             print("服务器断开连接")
             break
+        
         if data['type'] == MessageType.TXT.value:
             print(data['data'])
+            
+        if data['type'] == MessageType.BOARD_UPDATE.value:
+            pprint(data['data'])
             
         if data['type'] == MessageType.PLAYER_TURN.value:
             if data['data'] == 1:
